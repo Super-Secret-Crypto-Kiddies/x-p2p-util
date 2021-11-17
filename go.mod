@@ -1,3 +1,3 @@
-module github.com/Super-Secret-Crypto-Kiddies/x-p2p-util
+module github.com/Super-Secret-Crypto-Kiddies/x-util
 
 go 1.17
