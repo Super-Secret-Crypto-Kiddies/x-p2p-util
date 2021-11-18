@@ -1,4 +1,4 @@
-package types
+package headers
 
 type EthHeader struct {
 	Version        uint8

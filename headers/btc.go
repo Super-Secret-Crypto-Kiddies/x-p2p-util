@@ -1,4 +1,4 @@
-package types
+package headers
 
 type BtcHeader struct {
 	Version    uint32
