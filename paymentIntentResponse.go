@@ -11,7 +11,7 @@ const (
 	Empty = iota
 	Pending
 	Verified
-	Error
+	IntentError
 )
 
 type PaymentResponse struct {
