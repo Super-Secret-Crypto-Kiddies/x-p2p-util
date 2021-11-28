@@ -19,15 +19,10 @@ func NewSignedEthereumTx(
 	transaction := types.MustSignNewTx(
 		&privateKey,
 		types.NewLondonSigner(big.NewInt(chainId)),
-		types.DynamicFeeTx{
-			ChainID:    big.NewInt(chainId),
-			Nonce:      0,
-			GasTipCap:  big.NewInt(0),
-			GasFeeCap:  big.NewInt(1000000),
-			Gas:        1000,
-			To:         &to,
-			Value:      big.NewInt(int64(amount * 1e18)),
-			AccessList: []types.AccessTuple{},
+		types.LegacyTx{
+			Nonce: 0,
+			To:    &to,
+			Value: big.NewInt(int64(amount * 1e18)),
 		},
 	)
 
