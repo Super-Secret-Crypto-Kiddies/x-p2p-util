@@ -2,18 +2,30 @@ package currencies
 
 type Currency struct {
 	Name                  string
+	Type                  CurrencyType
 	UrlPrefix             string
 	Decimals              uint
 	PendingTimeoutSeconds int // Mempool timeout in seconds
 	VerifiedTimeoutBlocks int // Confirmation timeout in # of blocks
 }
 
+type CurrencyType int
+
+const (
+	Coin = iota
+	EthToken
+)
+
 var pTimeout = 600
 var ethereumVTimeout = 30 // in blocks
 
-var Currencies = map[string]Currency{
+var Currencies = []string{}
+var Chains = []string{}
+var EthTokens = []string{}
+var CurrencyData = map[string]Currency{
 	"btc": {
 		Name:                  "Bitcoin",
+		Type:                  Coin,
 		UrlPrefix:             "bitcoin",
 		Decimals:              8,
 		PendingTimeoutSeconds: pTimeout,
@@ -21,6 +33,7 @@ var Currencies = map[string]Currency{
 	},
 	"eth": {
 		Name:                  "Ethereum",
+		Type:                  Coin,
 		UrlPrefix:             "ethereum",
 		Decimals:              18,
 		PendingTimeoutSeconds: pTimeout,
@@ -28,6 +41,7 @@ var Currencies = map[string]Currency{
 	},
 	"bch": {
 		Name:                  "Bitcoin Cash",
+		Type:                  Coin,
 		UrlPrefix:             "bitcoincash",
 		Decimals:              8,
 		PendingTimeoutSeconds: pTimeout,
@@ -35,6 +49,7 @@ var Currencies = map[string]Currency{
 	},
 	"ltc": {
 		Name:                  "Litecoin",
+		Type:                  Coin,
 		UrlPrefix:             "litecoin",
 		Decimals:              8,
 		PendingTimeoutSeconds: pTimeout,
@@ -42,6 +57,7 @@ var Currencies = map[string]Currency{
 	},
 	"doge": {
 		Name:                  "Dogecoin",
+		Type:                  Coin,
 		UrlPrefix:             "dogecoin",
 		Decimals:              8,
 		PendingTimeoutSeconds: pTimeout,
@@ -49,6 +65,7 @@ var Currencies = map[string]Currency{
 	},
 	"dai": {
 		Name:                  "Dai",
+		Type:                  EthToken,
 		UrlPrefix:             "dai",
 		Decimals:              18,
 		PendingTimeoutSeconds: pTimeout,
@@ -56,6 +73,7 @@ var Currencies = map[string]Currency{
 	},
 	"usdt": {
 		Name:                  "Tether",
+		Type:                  EthToken,
 		UrlPrefix:             "tether",
 		Decimals:              6,
 		PendingTimeoutSeconds: pTimeout,
@@ -63,6 +81,7 @@ var Currencies = map[string]Currency{
 	},
 	"usdc": {
 		Name:                  "USDC",
+		Type:                  EthToken,
 		UrlPrefix:             "usdc",
 		Decimals:              18,
 		PendingTimeoutSeconds: pTimeout,
@@ -70,6 +89,7 @@ var Currencies = map[string]Currency{
 	},
 	"ampl": {
 		Name:                  "Ampleforth",
+		Type:                  EthToken,
 		UrlPrefix:             "ampl",
 		Decimals:              9,
 		PendingTimeoutSeconds: pTimeout,
@@ -77,7 +97,7 @@ var Currencies = map[string]Currency{
 	},
 }
 
-var EthTokens = []string{
+var EthTokensOld = []string{
 	"dai",
 	"usdt",
 	"usdc",
