@@ -15,8 +15,9 @@ type PeerInfo struct {
 type PeerType int
 
 const (
-	Node = iota
-	Server
+	Server = iota
+	Node
+	BootstrapNode
 )
 
 func (p PeerInfo) Marshal() []byte {
