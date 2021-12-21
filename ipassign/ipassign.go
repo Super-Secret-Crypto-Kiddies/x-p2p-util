@@ -26,10 +26,13 @@ func GetIPv4Address() string {
 }
 
 func GetIPv6Address() string {
-	resp, err := http.Get("https://v6.ident.me/")
+	resp, err := http.Get("http://api6.ipify.org/")
 
 	if err != nil {
-		panic(err)
+		resp, err = http.Get("http://v6.ident.me/") // fallback
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	body, _ := ioutil.ReadAll(resp.Body)
