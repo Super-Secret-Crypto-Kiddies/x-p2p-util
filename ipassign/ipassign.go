@@ -15,20 +15,22 @@ import (
 
 // NAT Traversal from libp2p
 
-func GetNatMapping() string {
+func GetNatMapping() (string, error) {
 	nat, err := nat.DiscoverNAT(context.Background())
 	if err != nil {
 		fmt.Println("Failed to discover NAT.")
+		return "", err
 	}
 	// defer nat.Close()
 	mapping, err := nat.NewMapping("tcp", 9871)
 	if err != nil {
 		fmt.Println("Failed to initialize NAT mapping")
+		return "", err
 	}
 	defer mapping.Close()
 	addr, _ := mapping.ExternalAddr()
 	fmt.Printf("Mapping %d to %s\n", mapping.InternalPort(), addr)
-	return addr.String()
+	return addr.String(), nil
 }
 
 // Half-baked UPnP support - currently unused
@@ -152,33 +154,41 @@ type APIResponse struct {
 	Query string `json:"query"`
 }
 
-func GetIPv4Address() string {
+func GetIPv4Address() (string, error) {
 	resp, err := http.Get("http://ip-api.com/json/")
 
 	if err != nil {
-		panic(err)
+		// panic(err)
+		fmt.Println(err)
+		return "", err
 	}
 
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+		return "", err
+	}
 
 	var apiResp APIResponse
 	json.Unmarshal(body, &apiResp)
 
-	return apiResp.Query
+	return apiResp.Query, nil
 }
 
-func GetIPv6Address() string {
+func GetIPv6Address() (string, error) {
 	resp, err := http.Get("http://api6.ipify.org/")
 
 	if err != nil {
 		resp, err = http.Get("http://v6.ident.me/") // fallback
 		if err != nil {
-			panic(err)
+			// panic(err)
+			fmt.Println(err)
+			return "", err
 		}
 	}
 
 	body, _ := ioutil.ReadAll(resp.Body)
 
-	return (string)(body)
+	return (string)(body), nil
 
 }
