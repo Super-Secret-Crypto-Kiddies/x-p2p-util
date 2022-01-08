@@ -7,16 +7,19 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/huin/goupnp/dcps/internetgateway2"
 	nat "github.com/libp2p/go-libp2p-nat"
 	"golang.org/x/sync/errgroup"
 )
 
-// NAT Traversal from libp2p
+// NAT Traversal with libp2p-nat
 
 func GetNatMapping() (string, error) {
-	nat, err := nat.DiscoverNAT(context.Background())
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	// do something with cancelfunc later
+	nat, err := nat.DiscoverNAT(ctx)
 	if err != nil {
 		fmt.Println("Failed to discover NAT.")
 		return "", err
@@ -27,8 +30,11 @@ func GetNatMapping() (string, error) {
 		fmt.Println("Failed to initialize NAT mapping")
 		return "", err
 	}
-	defer mapping.Close()
-	addr, _ := mapping.ExternalAddr()
+	// defer mapping.Close()
+	addr, err := mapping.ExternalAddr()
+	if err != nil {
+		return "", err
+	}
 	fmt.Printf("Mapping %d to %s\n", mapping.InternalPort(), addr)
 	return addr.String(), nil
 }
